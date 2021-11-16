@@ -1,5 +1,5 @@
 import { useAuth } from "context/auth-context";
-import React from "react";
+import React, { useState } from "react";
 import { ProjectListScreen } from "screens/project-list";
 import styled from "@emotion/styled";
 import { Row } from "components/lib";
@@ -9,8 +9,11 @@ import { Navigate, Route, Routes } from "react-router";
 import { BrowserRouter as Router } from "react-router-dom";
 import { ProjectScreen } from "screens/project";
 import { resetRoute } from "utils";
+import { ProjectModal } from "screens/project-list/project-modal";
+import { ProjectPopover } from "components/project-popover";
 
 export const AuthenticatedApp = () => {
+  const [projectModalOpen, setProjectModalOpen] = useState(false);
   return (
     <Container>
       <PageHeader />
@@ -28,6 +31,10 @@ export const AuthenticatedApp = () => {
           </Routes>
         </Router>
       </Main>
+      <ProjectModal
+        projectModalOpen={projectModalOpen}
+        onClose={() => setProjectModalOpen(false)}
+      ></ProjectModal>
     </Container>
   );
 };
@@ -55,11 +62,11 @@ const PageHeader = () => {
   return (
     <Header between={true}>
       <HeaderLeft gap={true}>
-        <Button type={"link"} onClick={resetRoute}>
+        <Button style={{ padding: 0 }} type={"link"} onClick={resetRoute}>
           <SoftwareLogo width={"18rem"} color={"rgb(38, 132, 255)"} />
         </Button>
-        <h3>Project</h3>
-        <h3>User</h3>
+        <ProjectPopover />
+        <span>User</span>
       </HeaderLeft>
       <HeaderRight>
         <Dropdown
